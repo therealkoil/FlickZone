@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Red Box Range</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main class="game" id="game">
+    <div class="credit">made by koil</div>
+
+    <section class="menu-screen" id="authScreen">
+      <div class="menu-card auth-card">
+        <p class="menu-kicker">Account</p>
+        <h1>Sign In</h1>
+        <p class="menu-copy">Create a global account or sign in to keep your progress, stats, and unlocks synced through Firebase.</p>
+
+        <label class="field">
+          <span>Username</span>
+          <input id="authUsername" type="text" autocomplete="username" maxlength="24">
+        </label>
+
+        <label class="field">
+          <span>Password</span>
+          <input id="authPassword" type="password" autocomplete="current-password" maxlength="64">
+        </label>
+
+        <p class="auth-message" id="authMessage"></p>
+
+        <div class="menu-actions">
+          <button class="menu-button primary" id="signInButton" type="button">Sign In</button>
+          <button class="menu-button" id="createAccountButton" type="button">Create Account</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="menu-screen hidden" id="startScreen">
+      <div class="menu-card">
+        <p class="menu-kicker">3D FPS Range</p>
+        <h1>Red Box Range</h1>
+        <p class="menu-copy">Pick a timed mode, tune your setup, then farm coins by landing shots on the box.</p>
+
+        <div class="mode-selector">
+          <p class="section-label">Modes</p>
+          <div class="mode-buttons">
+            <button class="mode-button active" data-mode="10" type="button">10 Seconds</button>
+            <button class="mode-button" data-mode="30" type="button">30 Seconds</button>
+            <button class="mode-button" data-mode="60" type="button">1 Minute</button>
+          </div>
+        </div>
+
+        <div class="menu-meta">
+          <span>Coins: <strong id="menuCoins">0</strong></span>
+          <span id="equippedSkinLabel">Equipped: Classic Red</span>
+        </div>
+
+        <div class="menu-actions">
+          <button class="menu-button primary" id="playButton" type="button">Play</button>
+          <button class="menu-button" id="openCustomizeButton" type="button">Customize</button>
+          <button class="menu-button" id="openSettingsButton" type="button">Settings</button>
+          <button class="menu-button" id="openStatsButton" type="button">Statistics</button>
+          <button class="menu-button" id="openLeaderboardButton" type="button">Leaderboard</button>
+          <button class="menu-button" id="openShopButton" type="button">Shop</button>
+          <button class="menu-button hidden" id="openAdminButton" type="button">Admin</button>
+        </div>
+      </div>
+    </section>
+
+    <aside class="panel-overlay hidden" id="customizePanel">
+      <div class="panel-card">
+        <div class="panel-header">
+          <div>
+            <p class="menu-kicker">Crosshair</p>
+            <h2>Customize</h2>
+          </div>
+          <button class="menu-button small" id="closeCustomizeButton" type="button">Close</button>
+        </div>
+
+        <label class="field">
+          <span>Size</span>
+          <input id="sizeInput" type="range" min="18" max="72" value="42">
+        </label>
+
+        <label class="field">
+          <span>Color</span>
+          <input id="colorInput" type="color" value="#ffffff">
+        </label>
+
+        <label class="field">
+          <span>Shape</span>
+          <select id="shapeInput">
+            <option value="cross">Cross</option>
+            <option value="dot">Dot</option>
+            <option value="ring">Ring</option>
+            <option value="diamond">Diamond</option>
+          </select>
+        </label>
+      </div>
+    </aside>
+
+    <aside class="panel-overlay hidden" id="settingsPanel">
+      <div class="panel-card">
+        <div class="panel-header">
+          <div>
+            <p class="menu-kicker">Game</p>
+            <h2>Settings</h2>
+          </div>
+          <button class="menu-button small" id="closeSettingsButton" type="button">Close</button>
+        </div>
+
+        <label class="toggle-row">
+          <span>Show FPS Counter</span>
+          <input id="showFpsInput" type="checkbox">
+        </label>
+
+        <label class="field">
+          <span>Font</span>
+          <select id="fontInput">
+            <option value="'Trebuchet MS', 'Segoe UI', sans-serif">Trebuchet</option>
+            <option value="Georgia, serif">Georgia</option>
+            <option value="'Courier New', monospace">Courier New</option>
+            <option value="Verdana, sans-serif">Verdana</option>
+          </select>
+        </label>
+
+        <div class="settings-account">
+          <p class="section-label">Account</p>
+          <p class="settings-user">Signed in as <strong id="settingsUsername">guest</strong></p>
+          <p class="settings-user" id="settingsRole">Role: Player</p>
+          <button class="menu-button" id="signOutButton" type="button">Sign Out</button>
+        </div>
+      </div>
+    </aside>
+
+    <aside class="panel-overlay hidden" id="shopPanel">
+      <div class="panel-card shop-card">
+        <div class="panel-header">
+          <div>
+            <p class="menu-kicker">Unlocks</p>
+            <h2>Box Shop</h2>
+          </div>
+          <button class="menu-button small" id="closeShopButton" type="button">Close</button>
+        </div>
+
+        <p class="shop-balance">Coins: <strong id="shopCoins">0</strong></p>
+        <div class="shop-grid" id="shopGrid"></div>
+      </div>
+    </aside>
+
+    <aside class="panel-overlay hidden" id="statsPanel">
+      <div class="panel-card">
+        <div class="panel-header">
+          <div>
+            <p class="menu-kicker">Profile</p>
+            <h2>Statistics</h2>
+          </div>
+          <button class="menu-button small" id="closeStatsButton" type="button">Close</button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="hud-label">Lifetime Hits</span>
+            <strong id="statsLifetimeHits">0</strong>
+          </div>
+          <div class="stat-card">
+            <span class="hud-label">Lifetime Misses</span>
+            <strong id="statsLifetimeMisses">0</strong>
+          </div>
+          <div class="stat-card">
+            <span class="hud-label">Accuracy</span>
+            <strong id="statsAccuracy">0%</strong>
+          </div>
+          <div class="stat-card">
+            <span class="hud-label">Total Coins</span>
+            <strong id="statsCoins">0</strong>
+          </div>
+          <div class="stat-card">
+            <span class="hud-label">Rounds Played</span>
+            <strong id="statsRounds">0</strong>
+          </div>
+          <div class="stat-card">
+            <span class="hud-label">Best Score</span>
+            <strong id="statsBestScore">0</strong>
+          </div>
+        </div>
+
+        <div class="match-history">
+          <p class="section-label">Match History</p>
+          <div class="history-list" id="matchHistoryList"></div>
+        </div>
+      </div>
+    </aside>
+
+    <aside class="panel-overlay hidden" id="leaderboardPanel">
+      <div class="panel-card">
+        <div class="panel-header">
+          <div>
+            <p class="menu-kicker">Global</p>
+            <h2>Leaderboard</h2>
+          </div>
+          <button class="menu-button small" id="closeLeaderboardButton" type="button">Close</button>
+        </div>
+
+        <div class="leaderboard-list" id="leaderboardList"></div>
+      </div>
+    </aside>
+
+    <aside class="panel-overlay hidden" id="adminPanel">
+      <div class="panel-card shop-card">
+        <div class="panel-header">
+          <div>
+            <p class="menu-kicker">Admin</p>
+            <h2>Account Control</h2>
+          </div>
+          <button class="menu-button small" id="closeAdminButton" type="button">Close</button>
+        </div>
+
+        <p class="shop-balance">Manage global player accounts saved in Firebase.</p>
+        <div class="admin-list" id="adminAccountList"></div>
+      </div>
+    </aside>
+
+    <div class="hud hidden" id="hud">
+      <div class="hud-panel">
+        <span class="hud-label">Hits</span>
+        <strong id="hitCounter">0</strong>
+      </div>
+      <div class="hud-panel">
+        <span class="hud-label">Misses</span>
+        <strong id="missCounter">0</strong>
+      </div>
+      <div class="hud-panel">
+        <span class="hud-label">Time Left</span>
+        <strong id="stopwatch">00:00.0</strong>
+      </div>
+      <div class="hud-panel">
+        <span class="hud-label">Coins</span>
+        <strong id="coinCounter">0</strong>
+      </div>
+      <div class="hud-panel hidden" id="fpsPanel">
+        <span class="hud-label">FPS</span>
+        <strong id="fpsCounter">0</strong>
+      </div>
+    </div>
+
+    <div class="game-actions hidden" id="gameActions">
+      <button class="menu-button small" id="inGameCustomizeButton" type="button">Customize</button>
+      <button class="menu-button small" id="inGameSettingsButton" type="button">Settings</button>
+      <button class="restart" id="restartButton" type="button">Restart</button>
+    </div>
+
+    <div class="arena hidden" id="arena">
+      <div class="world" id="world">
+        <div class="sky-glow"></div>
+        <div class="horizon"></div>
+        <div class="floor-grid"></div>
+        <div class="lane lane-left"></div>
+        <div class="lane lane-right"></div>
+      </div>
+
+      <div class="target target-3d skin-classic" id="target" aria-label="Red box target">
+        <div class="target-face target-front"></div>
+        <div class="target-face target-side"></div>
+        <div class="target-face target-top"></div>
+      </div>
+
+      <div class="crosshair shape-cross" id="crosshair" aria-hidden="true">
+        <span class="crosshair-line horizontal"></span>
+        <span class="crosshair-line vertical"></span>
+        <span class="crosshair-dot"></span>
+      </div>
+
+      <div class="muzzle-flash" id="muzzleFlash" aria-hidden="true"></div>
+
+      <div class="gun" id="gun" aria-hidden="true">
+        <div class="gun-body"></div>
+        <div class="gun-barrel"></div>
+        <div class="gun-sight"></div>
+        <div class="gun-grip"></div>
+      </div>
+
+      <div class="view-readout" id="viewReadout">Yaw 0 | Pitch 0</div>
+    </div>
+
+    <div class="pause-overlay hidden" id="pauseOverlay">
+      <div class="pause-card">
+        <p id="pauseTitle">Paused</p>
+        <span id="pauseSubtitle">Press Esc to resume</span>
+        <div class="menu-actions pause-actions">
+          <button class="menu-button" id="resumeButton" type="button">Resume</button>
+          <button class="menu-button" id="menuButton" type="button">Menu</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="./firebase-config.js"></script>
+  <script src="./script.js"></script>
+</body>
+</html>
